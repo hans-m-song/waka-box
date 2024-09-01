@@ -1,4 +1,3 @@
-require("dotenv").config();
 const core = require("@actions/core");
 const { WakaTimeClient, RANGE } = require("wakatime-client");
 const { Octokit } = require("@octokit/rest");
@@ -15,7 +14,9 @@ const octokit = new Octokit({ auth: `token ${githubToken}` });
 
 async function main() {
   const stats = await wakatime.getMyStats({ range: RANGE.LAST_7_DAYS });
-  console.log(stats);
+  core.startGroup("stats");
+  console.log(JSON.stringify(stats));
+  core.endGroup();
   await updateGist(stats);
 }
 
